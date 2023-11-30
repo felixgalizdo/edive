@@ -8,8 +8,8 @@ const Home = () => {
     const navigate = useNavigate();
     const [search, setSearch] = useState('');
     const [result, setResult] = useState([]);
-    const [show, setShow] = useState(false);
- 
+    const [showYT, setShowYT] = useState(false);
+
     const handleLogout = () => {               
         signOut(auth).then(() => {
         // Sign-out successful.
@@ -41,11 +41,15 @@ const Home = () => {
                 console.log(error)
             })
 
-        
     }
 
-    const handleOpen = () => {
-        setShow(true);
+    const youtubeButton = () => {
+        if(result.length === 0){
+            console.log('array is empty');
+        }else {
+            setShowYT(!showYT);
+        }
+
     }
 
     useEffect(() => {
@@ -70,25 +74,25 @@ const Home = () => {
                     <input type='text' onChange={(e)=>setSearch(e.target.value)}></input>
                     <button type='submit'>Search</button>
                 </form>
-            </div>
-
-            <div>
-                <ul>
-                    {
-                        result?.map((item,index)=>(
-                            <li key={index}>
-                                <iframe
-                                  width="853"
-                                  height="480"
-                                  src={`https://www.youtube.com/embed/${item.id.videoId}`}
-                                  frameBorder="0"
-                                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                  allowFullScreen
-                                />
-                            </li>
-                        ))
-                    }
-                </ul>
+            
+                <button onClick={youtubeButton}>
+                    Show Youtube
+                </button>
+                    <ul>
+                        { 
+                            result?.map((item,index)=>(
+                                showYT ? <li key={index}>
+                                    <iframe
+                                      width="853"
+                                      height="480"
+                                      src={`https://www.youtube.com/embed/${item.id.videoId}`}
+                                      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                      allowFullScreen
+                                    />
+                                </li> : null
+                            ))
+                        }
+                    </ul>
             </div>
             
         </>
